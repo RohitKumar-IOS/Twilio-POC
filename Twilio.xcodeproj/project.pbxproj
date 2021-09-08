@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,7 @@
 		B7FCCD9226E8718B001758B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7FCCD9126E8718B001758B2 /* Assets.xcassets */; };
 		B7FCCD9526E8718B001758B2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B7FCCD9326E8718B001758B2 /* LaunchScreen.storyboard */; };
 		B7FCCD9D26E87510001758B2 /* SampleCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FCCD9C26E87510001758B2 /* SampleCode.swift */; };
+		B7FCCDA026E8D5D1001758B2 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B7FCCD9F26E8D5D1001758B2 /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7FCCDA026E8D5D1001758B2 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +91,9 @@
 			dependencies = (
 			);
 			name = Twilio;
+			packageProductDependencies = (
+				B7FCCD9F26E8D5D1001758B2 /* Alamofire */,
+			);
 			productName = Twilio;
 			productReference = B7FCCD8226E87186001758B2 /* Twilio.app */;
 			productType = "com.apple.product-type.application";
@@ -116,6 +121,9 @@
 				Base,
 			);
 			mainGroup = B7FCCD7926E87186001758B2;
+			packageReferences = (
+				B7FCCD9E26E8D5D1001758B2 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = B7FCCD8326E87186001758B2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -349,6 +357,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B7FCCD9E26E8D5D1001758B2 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B7FCCD9F26E8D5D1001758B2 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B7FCCD9E26E8D5D1001758B2 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		B7FCCD8E26E87186001758B2 /* Twilio.xcdatamodeld */ = {

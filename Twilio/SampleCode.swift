@@ -94,3 +94,196 @@ import Foundation
 
  
  */
+
+/**
+ 
+ func encodeVideo(videoURL: URL){
+     let avAsset = AVURLAsset(url: videoURL)
+     let startDate = Date()
+     let exportSession = AVAssetExportSession(asset: avAsset, presetName: AVAssetExportPresetPassthrough)
+     
+     let docDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+     let myDocPath = NSURL(fileURLWithPath: docDir).appendingPathComponent("temp.mp4")?.absoluteString
+     
+     let docDir2 = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL
+     
+     let filePath = docDir2.appendingPathComponent("rendered-Video.mp4")
+     deleteFile(filePath!)
+     
+     if FileManager.default.fileExists(atPath: myDocPath!){
+         do{
+             try FileManager.default.removeItem(atPath: myDocPath!)
+         }catch let error{
+             print(error)
+         }
+     }
+     
+     exportSession?.outputURL = filePath
+     exportSession?.outputFileType = AVFileType.mp4
+     exportSession?.shouldOptimizeForNetworkUse = true
+     
+     let start = CMTimeMakeWithSeconds(0.0, preferredTimescale: 0)
+     let range = CMTimeRange(start: start, duration: avAsset.duration)
+     exportSession?.timeRange = range
+     
+     exportSession!.exportAsynchronously{() -> Void in
+         switch exportSession!.status{
+         case .failed:
+             print("\(exportSession!.error!)")
+         case .cancelled:
+             print("Export cancelled")
+         case .completed:
+             let endDate = Date()
+             let time = endDate.timeIntervalSince(startDate)
+             print(time)
+             print("Successful")
+             print(exportSession?.outputURL ?? "")
+         default:
+             break
+         }
+         
+     }
+ }
+
+ func deleteFile(_ filePath:URL) {
+     guard FileManager.default.fileExists(atPath: filePath.path) else{
+         return
+     }
+     do {
+         try FileManager.default.removeItem(atPath: filePath.path)
+     }catch{
+         fatalError("Unable to delete file: \(error) : \(#function).")
+     }
+ }
+ 
+ */
+
+
+
+
+/**
+ 
+ Download the file from url
+ 
+ extension URL {
+     func download(to directory: FileManager.SearchPathDirectory, using fileName: String? = nil, overwrite: Bool = false, completion: @escaping (URL?, Error?) -> Void) throws {
+         let directory = try FileManager.default.url(for: directory, in: .userDomainMask, appropriateFor: nil, create: true)
+         let destination: URL
+         if let fileName = fileName {
+             destination = directory
+                 .appendingPathComponent(fileName)
+                 .appendingPathExtension(self.pathExtension)
+         } else {
+             destination = directory
+             .appendingPathComponent(lastPathComponent)
+         }
+         if !overwrite, FileManager.default.fileExists(atPath: destination.path) {
+             completion(destination, nil)
+             return
+         }
+         URLSession.shared.downloadTask(with: self) { location, _, error in
+             guard let location = location else {
+                 completion(nil, error)
+                 return
+             }
+             do {
+                 if overwrite, FileManager.default.fileExists(atPath: destination.path) {
+                     try FileManager.default.removeItem(at: destination)
+                 }
+                 try FileManager.default.moveItem(at: location, to: destination)
+                 completion(destination, nil)
+             } catch {
+                 print(error)
+             }
+         }.resume()
+     }
+
+ 
+ 
+ 
+ let alarm = URL(string: "urlstring here")!
+ do {
+     try alarm.download(to: .documentDirectory) { url, error in
+         guard let url = url else { return }
+         print("final url", url)
+         
+     }
+ } catch {
+     print(error)
+ }
+ 
+ 
+ */
+
+
+/**
+ 
+ func downloadVideoLinkAndCreateAsset(_ videoLink: String) {
+
+     // use guard to make sure you have a valid url
+     guard let videoURL = URL(string: videoLink) else { return }
+
+     guard let documentsDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+
+     // check if the file already exist at the destination folder if you don't want to download it twice
+     if !FileManager.default.fileExists(atPath: documentsDirectoryURL.appendingPathComponent(videoURL.lastPathComponent).path) {
+
+         // set up your download task
+         URLSession.shared.downloadTask(with: videoURL) { (location, response, error) -> Void in
+
+             // use guard to unwrap your optional url
+             guard let location = location else { return }
+
+             // create a deatination url with the server response suggested file name
+             let destinationURL = documentsDirectoryURL.appendingPathComponent(response?.suggestedFilename ?? videoURL.lastPathComponent)
+             
+             
+
+             do {
+
+                 try FileManager.default.moveItem(at: location, to: destinationURL)
+
+                 PHPhotoLibrary.requestAuthorization({ (authorizationStatus: PHAuthorizationStatus) -> Void in
+
+                     // check if user authorized access photos for your app
+                     if authorizationStatus == .authorized {
+                         PHPhotoLibrary.shared().performChanges({
+                             PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: destinationURL)}) { completed, error in
+                                 if completed {
+                                     print("Video asset created")
+                                 } else {
+                                     print(error)
+                                 }
+                         }
+                     }
+                 })
+
+             } catch { print(error) }
+
+         }.resume()
+
+     } else {
+         print("File already exists at destination url")
+     }
+ }
+
+ 
+ */
+
+/**
+ Alamofire
+ 
+ let destination: DownloadRequest.Destination = { _, _ in
+     let documentsURL = FileManager.default.urls(for: .picturesDirectory, in: .userDomainMask)[0]
+         let fileURL = documentsURL.appendingPathComponent("movie.mp4")
+         return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+ }
+
+ AF.download(url, to: destination).response { response in
+     debugPrint(response)
+     if response.error == nil, let path = response.fileURL?.path {
+         print(path)
+     }
+ }
+ 
+ */
